@@ -4,7 +4,9 @@
   "main": "list-images/index.js",
   "scripts": {
     "start": "func start",
-    "serve": "python -m http.server 8080"
+    "serve": "python -m http.server 8080",
+    "build": "echo 'Build completed - static files ready'",
+    "build:azure": "echo 'Azure build completed - static files ready'"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.28.0"
