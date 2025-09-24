@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caramel Image Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hi! I'm Caramel</h1>
+        </div>
+
+        <div class="controls">
+            <button class="refresh-btn" onclick="loadImages()">Refresh Gallery</button>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="loading" id="loading">
+            Loading your images...
+        </div>
+
+        <div class="error" id="error" style="display: none;"></div>
+
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Modal for full-size image viewing -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

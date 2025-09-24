@@ -1,0 +1,211 @@
+:root {
+    --vanilla: #fff0b5ff;
+    --flax: #ffee93ff;
+    --maize: #ffec71ff;
+    --maize-2: #ffe94eff;
+    --mustard: #ffda3dff;
+    --mikado-yellow: #fdc43fff;
+    --xanthous: #fdb833ff;
+    --harvest-gold: #dd9b1aff;
+    --dark-goldenrod: #bd7e01ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: var(--vanilla);
+    min-height: 100vh;
+    padding: 20px;
+    cursor: url('./paw_curser.svg') 16 16, auto;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    color: var(--dark-goldenrod);
+    margin-bottom: 40px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.header h1 {
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+    color: var(--harvest-gold);
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.header p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    color: var(--dark-goldenrod);
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.loading {
+    text-align: center;
+    color: var(--dark-goldenrod);
+    font-size: 1.5rem;
+    margin: 50px 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.error {
+    background: rgba(231, 76, 60, 0.9);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.image-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(221, 155, 26, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--flax);
+}
+
+.image-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(221, 155, 26, 0.4);
+    border-color: var(--mustard);
+}
+
+.image-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    cursor: url('./paw_curser.svg') 16 16, pointer;
+}
+
+.image-info {
+    padding: 15px;
+}
+
+.image-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    word-break: break-all;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.image-url {
+    font-size: 0.9rem;
+    color: #666;
+    word-break: break-all;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.refresh-btn {
+    background: var(--harvest-gold);
+    color: white;
+    border: 2px solid var(--harvest-gold);
+    padding: 12px 30px;
+    border-radius: 25px;
+    cursor: url('./paw_curser.svg') 16 16, pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.refresh-btn:hover {
+    background: var(--dark-goldenrod);
+    border-color: var(--dark-goldenrod);
+    color: white;
+}
+
+.stats {
+    text-align: center;
+    color: var(--dark-goldenrod);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Modal for full-size image viewing */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: url('./paw_curser.svg') 16 16, pointer;
+}
+
+.close:hover {
+    color: #bbb;
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+}
+
+/* Paw click effect animation */
+@keyframes pawEffect {
+    0% {
+        opacity: 1;
+        transform: scale(0.5) rotate(0deg);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(10deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.8) rotate(15deg) translateY(-20px);
+    }
+}
