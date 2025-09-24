@@ -29,7 +29,8 @@ jobs:
           app_location: "/"
           api_location: "list-images"
           output_location: "dist"
-          app_build_command: "npm run build"
+          app_build_command: "bash build.sh"
+          app_artifact_location: "dist"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
