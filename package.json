@@ -6,8 +6,8 @@
     "preinstall": "echo 'Preparing dependencies...'",
     "start": "func start",
     "serve": "python -m http.server 8080",
-    "build": "mkdir -p dist && cp *.html *.css *.js *.svg dist/ 2>/dev/null || (md dist && copy *.html dist\\ && copy *.css dist\\ && copy *.js dist\\ && copy *.svg dist\\) && echo 'Build completed - files copied to dist'",
-    "build:azure": "mkdir -p dist && cp *.html *.css *.js *.svg dist/ 2>/dev/null || (md dist && copy *.html dist\\ && copy *.css dist\\ && copy *.js dist\\ && copy *.svg dist\\) && echo 'Azure build completed - files copied to dist'"
+    "build": "node -e \"const fs=require('fs'); const path=require('path'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); ['index.html','styles.css','script.js','paw_curser.svg'].forEach(f => {if(fs.existsSync(f)) fs.copyFileSync(f, path.join('dist',f));}); console.log('Build completed - files copied to dist');\"",
+    "build:azure": "node -e \"const fs=require('fs'); const path=require('path'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); ['index.html','styles.css','script.js','paw_curser.svg'].forEach(f => {if(fs.existsSync(f)) fs.copyFileSync(f, path.join('dist',f));}); console.log('Azure build completed - files copied to dist');\""
   },
   "dependencies": {
     "@azure/storage-blob": "^12.28.0"
