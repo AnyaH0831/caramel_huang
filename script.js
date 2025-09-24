@@ -1,5 +1,8 @@
-// Configuration - Update this URL to match your Azure Function endpoint
-const FUNCTION_URL = 'http://localhost:7071/api/list-images';
+// Configuration - Automatically detects local vs production environment
+const apiBaseUrl = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? "http://localhost:7071"
+  : `https://${window.location.hostname}`;
+const FUNCTION_URL = `${apiBaseUrl}/api/list-images`;
 
 // DOM elements
 const loadingEl = document.getElementById('loading');
