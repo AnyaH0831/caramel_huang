@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "list-images/index.js",
   "scripts": {
+    "preinstall": "echo 'Preparing dependencies...'",
     "start": "func start",
     "serve": "python -m http.server 8080",
-    "build": "echo 'Build completed - static files ready'",
-    "build:azure": "echo 'Azure build completed - static files ready'"
+    "build": "echo 'Building static files...' && echo 'Build completed successfully'",
+    "build:azure": "echo 'Azure build process...' && echo 'Azure build completed successfully'"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.28.0"
