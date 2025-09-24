@@ -6,8 +6,8 @@
     "preinstall": "echo 'Preparing dependencies...'",
     "start": "func start",
     "serve": "python -m http.server 8080",
-    "build": "echo 'Building static files...' && echo 'Build completed successfully'",
-    "build:azure": "echo 'Azure build process...' && echo 'Azure build completed successfully'"
+    "build": "mkdir -p dist && cp *.html *.css *.js *.svg dist/ 2>/dev/null || (md dist && copy *.html dist\\ && copy *.css dist\\ && copy *.js dist\\ && copy *.svg dist\\) && echo 'Build completed - files copied to dist'",
+    "build:azure": "mkdir -p dist && cp *.html *.css *.js *.svg dist/ 2>/dev/null || (md dist && copy *.html dist\\ && copy *.css dist\\ && copy *.js dist\\ && copy *.svg dist\\) && echo 'Azure build completed - files copied to dist'"
   },
   "dependencies": {
     "@azure/storage-blob": "^12.28.0"
