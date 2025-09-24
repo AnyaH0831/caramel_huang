@@ -19,20 +19,36 @@ async function loadImages() {
     showLoading();
     hideError();
     
+    // Debug info
+    console.log('Environment:', window.location.hostname);
+    console.log('API Base URL:', apiBaseUrl);
+    console.log('Function URL:', FUNCTION_URL);
+    
     try {
+        console.log('Fetching from:', FUNCTION_URL);
         const response = await fetch(FUNCTION_URL);
         
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
         }
         
         const imageUrls = await response.json();
+        console.log('Successfully loaded images:', imageUrls);
         displayImages(imageUrls);
         updateStats(imageUrls.length);
         
     } catch (error) {
         console.error('Error loading images:', error);
-        showError(`Failed to load images: ${error.message}. Make sure your Azure Function is running on ${FUNCTION_URL}`);
+        console.error('Full error details:', {
+            message: error.message,
+            stack: error.stack,
+            functionUrl: FUNCTION_URL,
+            hostname: window.location.hostname
+        });
+        showError(`Failed to load images: ${error.message}. Trying to fetch from: ${FUNCTION_URL}`);
     } finally {
         hideLoading();
     }
