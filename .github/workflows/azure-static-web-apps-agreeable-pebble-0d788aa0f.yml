@@ -19,6 +19,9 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Ensure .git/config is writable
+        run: |
+          chmod -R u+w .git
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
