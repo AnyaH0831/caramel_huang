@@ -80,20 +80,20 @@ function displayImages(imageUrls) {
 
 // Custom captions for photos
 const photoCaptions = {
-    'IMG_0329.jpg': 'Caramel Playing in the Yard',
-    'IMG_0396.jpg': 'Sleepy Caramel',
-    'IMG_0538.jpg': 'At the Dog Park',
-    'IMG_2388.jpg': 'Happy Caramel',
-    'IMG_2410.jpg': 'Sunny Day Walk',
-    'IMG_2419.jpg': 'Caramel Being Cute',
-    'IMG_2618.jpg': 'Adventure Time',
-    'IMG_2899.JPG': 'Golden Hour Caramel',
-    'IMG_4208.jpg': 'Playing with Toys',
-    'IMG_5141.jpg': 'Caramel\'s Portrait',
-    'IMG_7896.JPG': 'Relaxing Day',
-    'IMG_7952.JPG': 'Beautiful Caramel',
-    'IMG_8614.jpg': 'Fun Times',
-    'IMG_9981.jpg': 'Sweet Caramel'
+    'IMG_0329.jpg': 'What you watchin\'?',
+    'IMG_0396.jpg': 'Handshake',
+    'IMG_0538.jpg': 'Hehe I\'m pretty',
+    'IMG_2388.jpg': 'Happy Caramel at WOSS',
+    'IMG_2410.jpg': 'Watchin\' humans at WOSS',
+    'IMG_2419.jpg': 'Haha I just barked at Mr.VR',
+    'IMG_2618.jpg': 'I look so mature',
+    'IMG_2899.JPG': 'I\'m so mature',
+    'IMG_4208.jpg': 'I\'m a deer',
+    'IMG_5141.jpg': 'Skunk ToT',
+    'IMG_7896.JPG': 'Hehe fwend',
+    'IMG_7952.JPG': 'Chipmunks',
+    'IMG_8614.jpg': ':/',
+    'IMG_9981.jpg': 'I\'m handsome'
 };
 
 function createImageCard(imageUrl) {
