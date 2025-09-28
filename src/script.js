@@ -1,11 +1,6 @@
-// Configuration - Use environment variable or fallback to auto-detection
+// Configuration - Use auto-detection for now
 const getApiBaseUrl = () => {
-    // Check if API_BASE_URL is injected by Azure (will be available as window.API_BASE_URL)
-    if (window.API_BASE_URL) {
-        return window.API_BASE_URL;
-    }
-    
-    // Fallback to auto-detection
+    // Use auto-detection based on current hostname
     return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:7071"
         : `https://${window.location.hostname}`;
