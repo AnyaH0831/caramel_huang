@@ -13,6 +13,7 @@ const getApiBaseUrl = () => {
 
 const apiBaseUrl = getApiBaseUrl();
 const FUNCTION_URL = `${apiBaseUrl}/api/list-images`;
+const VISITOR_COUNT_URL = `${apiBaseUrl}/api/visitor-count`;
 
 // DOM elements
 const loadingEl = document.getElementById('loading');
@@ -21,9 +22,13 @@ const galleryEl = document.getElementById('gallery');
 const statsEl = document.getElementById('stats');
 const modal = document.getElementById('imageModal');
 const modalImg = document.getElementById('modalImage');
+const visitorCountEl = document.getElementById('visitorCount');
 
-// Load images when page loads
-document.addEventListener('DOMContentLoaded', loadImages);
+// Load images and update visitor count when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadImages();
+    updateVisitorCount();
+});
 
 async function loadImages() {
     showLoading();
@@ -180,3 +185,25 @@ document.addEventListener('click', function(e) {
         createPawEffect(e.clientX, e.clientY);
     }
 });
+
+// Visitor Counter Functions
+async function updateVisitorCount() {
+    try {
+        console.log('Updating visitor count...');
+        const response = await fetch(VISITOR_COUNT_URL, {
+            method: 'GET'
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Visitor count response:', data);
+            visitorCountEl.textContent = data.count || 'Error';
+        } else {
+            console.error('Failed to fetch visitor count:', response.status);
+            visitorCountEl.textContent = 'Error';
+        }
+    } catch (error) {
+        console.error('Error fetching visitor count:', error);
+        visitorCountEl.textContent = 'Error';
+    }
+}

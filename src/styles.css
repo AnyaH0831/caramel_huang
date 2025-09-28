@@ -148,6 +148,30 @@ body {
     font-family: 'Comic Sans MS', sans-serif;
 }
 
+.visitor-counter {
+    text-align: center;
+    color: var(--dark-goldenrod);
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-family: 'Comic Sans MS', sans-serif;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: inline-block;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.visitor-icon {
+    margin-right: 8px;
+    font-size: 1.2em;
+}
+
+.visitor-count {
+    font-weight: bold;
+    color: var(--harvest-gold);
+}
+
 /* Modal for full-size image viewing */
 .modal {
     display: none;
