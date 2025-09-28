@@ -1,0 +1,1 @@
+{\n  "routes": [\n    {\n      "route": "/api/*",\n      "allowedRoles": ["anonymous"]\n    }\n  ],\n  "navigationFallback": {\n    "rewrite": "/index.html"\n  },\n  "platform": {\n    "apiRuntime": "node:18"\n  }\n}
