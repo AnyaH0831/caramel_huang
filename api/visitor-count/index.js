@@ -12,7 +12,7 @@ module.exports = async function (context, req) {
         
         const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         const containerClient = blobServiceClient.getContainerClient("visitor-data");
-        const blobClient = containerClient.getBlobClient("visitor-count.json");
+        const blobClient = containerClient.getBlockBlobClient("visitor-count.json");
         
         console.log("Blob service client created successfully");
         
@@ -42,7 +42,7 @@ module.exports = async function (context, req) {
         
         console.log("Uploading updated data:", updatedData);
         const dataString = JSON.stringify(updatedData);
-        await blobClient.uploadData(Buffer.from(dataString), {
+        await blobClient.upload(dataString, dataString.length, {
             overwrite: true,
             blobHTTPHeaders: { blobContentType: "application/json" }
         });
