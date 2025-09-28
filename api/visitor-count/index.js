@@ -2,15 +2,19 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
     try {
-        // For now, we'll use a simple counter stored in Azure Blob Storage
-        // In production, you'd want to use Azure Table Storage or Cosmos DB
+        // Check if connection string exists
+        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+        if (!connectionString) {
+            throw new Error("AZURE_STORAGE_CONNECTION_STRING environment variable is not set");
+        }
         
-        const blobServiceClient = BlobServiceClient.fromConnectionString(
-            process.env.AZURE_STORAGE_CONNECTION_STRING
-        );
+        console.log("Connection string exists, creating blob service client...");
         
+        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         const containerClient = blobServiceClient.getContainerClient("visitor-data");
         const blobClient = containerClient.getBlobClient("visitor-count.json");
+        
+        console.log("Blob service client created successfully");
         
         let visitorCount = 1;
         
@@ -51,6 +55,13 @@ module.exports = async function (context, req) {
         
     } catch (error) {
         console.error('Error updating visitor count:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack,
+            connectionStringExists: !!process.env.AZURE_STORAGE_CONNECTION_STRING,
+            storageAccountName: process.env.STORAGE_ACCOUNT_NAME
+        });
+        
         context.res = {
             status: 500,
             headers: { 
@@ -59,6 +70,7 @@ module.exports = async function (context, req) {
             },
             body: { 
                 error: "Failed to update visitor count",
+                errorMessage: error.message,
                 count: "Error"
             }
         };
