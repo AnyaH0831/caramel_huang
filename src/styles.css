@@ -17,7 +17,7 @@
 }
 
 body {
-    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Bradley Hand', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Kalam', 'Comic Sans MS', 'Chalkboard SE', 'Bradley Hand', cursive, sans-serif;
     background: var(--vanilla);
     min-height: 100vh;
     padding: 20px;
@@ -184,10 +184,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    body {
-        font-family: 'Comic Sans MS', 'Chalkboard SE', 'Bradley Hand', 'Trebuchet MS', Arial, sans-serif;
-    }
-    
     .header h1 {
         font-size: 2rem;
     }
