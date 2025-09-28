@@ -17,7 +17,7 @@
 }
 
 body {
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
     background: var(--vanilla);
     min-height: 100vh;
     padding: 20px;
@@ -33,7 +33,7 @@ body {
     text-align: center;
     color: var(--dark-goldenrod);
     margin-bottom: 40px;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .header h1 {
@@ -41,14 +41,14 @@ body {
     text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
     margin-bottom: 10px;
     color: var(--harvest-gold);
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .header p {
     font-size: 1.2rem;
     opacity: 0.8;
     color: var(--dark-goldenrod);
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .loading {
@@ -56,7 +56,7 @@ body {
     color: var(--dark-goldenrod);
     font-size: 1.5rem;
     margin: 50px 0;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .error {
@@ -66,7 +66,7 @@ body {
     border-radius: 10px;
     text-align: center;
     margin: 20px 0;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .gallery {
@@ -107,14 +107,14 @@ body {
     color: #333;
     margin-bottom: 5px;
     word-break: break-all;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .image-url {
     font-size: 0.9rem;
     color: #666;
     word-break: break-all;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .controls {
@@ -131,7 +131,7 @@ body {
     cursor: url('./paw_curser.svg') 16 16, pointer;
     font-size: 1rem;
     transition: all 0.3s ease;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 .refresh-btn:hover {
@@ -145,7 +145,7 @@ body {
     color: var(--dark-goldenrod);
     margin-bottom: 20px;
     font-size: 1.1rem;
-    font-family: 'Comic Sans MS', 'Apple Color Emoji', 'Segoe UI Emoji', 'Trebuchet MS', Arial, sans-serif;
+    font-family: 'Comic Sans MS', sans-serif;
 }
 
 /* Modal for full-size image viewing */
