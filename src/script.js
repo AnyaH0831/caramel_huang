@@ -78,6 +78,24 @@ function displayImages(imageUrls) {
     });
 }
 
+// Custom captions for photos
+const photoCaptions = {
+    'IMG_0329.jpg': 'Caramel Playing in the Yard',
+    'IMG_0396.jpg': 'Sleepy Caramel',
+    'IMG_0538.jpg': 'At the Dog Park',
+    'IMG_2388.jpg': 'Happy Caramel',
+    'IMG_2410.jpg': 'Sunny Day Walk',
+    'IMG_2419.jpg': 'Caramel Being Cute',
+    'IMG_2618.jpg': 'Adventure Time',
+    'IMG_2899.JPG': 'Golden Hour Caramel',
+    'IMG_4208.jpg': 'Playing with Toys',
+    'IMG_5141.jpg': 'Caramel\'s Portrait',
+    'IMG_7896.JPG': 'Relaxing Day',
+    'IMG_7952.JPG': 'Beautiful Caramel',
+    'IMG_8614.jpg': 'Fun Times',
+    'IMG_9981.jpg': 'Sweet Caramel'
+};
+
 function createImageCard(imageUrl) {
     const card = document.createElement('div');
     card.className = 'image-card';
@@ -86,10 +104,13 @@ function createImageCard(imageUrl) {
     const urlParts = imageUrl.split('/');
     const filename = urlParts[urlParts.length - 1];
     
+    // Get custom caption or use filename as fallback
+    const caption = photoCaptions[filename] || filename;
+    
     card.innerHTML = `
-        <img src="${imageUrl}" alt="${filename}" onclick="openModal('${imageUrl}')" onerror="handleImageError(this)">
+        <img src="${imageUrl}" alt="${caption}" onclick="openModal('${imageUrl}')" onerror="handleImageError(this)">
         <div class="image-info">
-            <div class="image-name">${filename}</div>
+            <div class="image-name">${caption}</div>
         </div>
     `;
     
