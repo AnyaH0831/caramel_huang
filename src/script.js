@@ -1,7 +1,17 @@
-// Configuration - Automatically detects local vs production environment
-const apiBaseUrl = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:7071"
-  : `https://${window.location.hostname}`;
+// Configuration - Use environment variable or fallback to auto-detection
+const getApiBaseUrl = () => {
+    // Check if API_BASE_URL is injected by Azure (will be available as window.API_BASE_URL)
+    if (window.API_BASE_URL) {
+        return window.API_BASE_URL;
+    }
+    
+    // Fallback to auto-detection
+    return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://localhost:7071"
+        : `https://${window.location.hostname}`;
+};
+
+const apiBaseUrl = getApiBaseUrl();
 const FUNCTION_URL = `${apiBaseUrl}/api/list-images`;
 
 // DOM elements
