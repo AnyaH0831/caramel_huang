@@ -146,7 +146,7 @@ function hideError() {
 }
 
 function updateStats(count) {
-    statsEl.textContent = `Found ${count} image${count !== 1 ? 's' : ''} in your collection`;
+    // Stats display removed
 }
 
 // Paw click effect
