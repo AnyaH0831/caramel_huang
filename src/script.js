@@ -102,7 +102,7 @@ function handleImageError(img) {
 }
 
 function openModal(imageUrl) {
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
     modalImg.src = imageUrl;
 }
 
