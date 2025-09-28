@@ -41,11 +41,11 @@ module.exports = async function (context, req) {
         };
         
         console.log("Uploading updated data:", updatedData);
-        await blobClient.upload(
-            JSON.stringify(updatedData), 
-            JSON.stringify(updatedData).length,
-            { overwrite: true }
-        );
+        const dataString = JSON.stringify(updatedData);
+        await blobClient.uploadData(Buffer.from(dataString), {
+            overwrite: true,
+            blobHTTPHeaders: { blobContentType: "application/json" }
+        });
         console.log("Successfully uploaded visitor count");
         
         context.res = {
