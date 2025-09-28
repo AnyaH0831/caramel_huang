@@ -19,14 +19,19 @@ module.exports = async function (context, req) {
         let visitorCount = 1;
         
         try {
+            // Ensure the container exists first
+            await containerClient.createIfNotExists();
+            console.log("Container exists or created successfully");
+            
             // Try to read existing count
             const downloadResponse = await blobClient.download();
             const data = await streamToString(downloadResponse.readableStreamBody);
             const counters = JSON.parse(data);
             visitorCount = (counters.count || 0) + 1;
+            console.log("Read existing count:", counters.count, "new count:", visitorCount);
         } catch (error) {
             // File doesn't exist, start with 1
-            console.log("Starting new visitor count");
+            console.log("Starting new visitor count, error reading existing:", error.message);
         }
         
         // Update the count
@@ -35,11 +40,13 @@ module.exports = async function (context, req) {
             lastUpdated: new Date().toISOString() 
         };
         
+        console.log("Uploading updated data:", updatedData);
         await blobClient.upload(
             JSON.stringify(updatedData), 
             JSON.stringify(updatedData).length,
             { overwrite: true }
         );
+        console.log("Successfully uploaded visitor count");
         
         context.res = {
             status: 200,
