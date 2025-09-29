@@ -258,28 +258,84 @@ async function downloadImage() {
         const urlParts = currentImageUrl.split('/');
         const filename = urlParts[urlParts.length - 1];
         
-        // Fetch the image
-        const response = await fetch(currentImageUrl);
-        const blob = await response.blob();
+        // Create a canvas to convert the image
+        const img = new Image();
+        img.crossOrigin = 'anonymous'; // Try to handle CORS
         
-        // Create download link
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = filename;
+        img.onload = function() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size to match image
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                
+                // Draw image to canvas
+                ctx.drawImage(img, 0, 0);
+                
+                // Convert canvas to blob and download
+                canvas.toBlob(function(blob) {
+                    const downloadUrl = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = filename;
+                    
+                    // Trigger download
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Clean up
+                    window.URL.revokeObjectURL(downloadUrl);
+                    
+                    console.log('Image downloaded:', filename);
+                }, 'image/jpeg', 0.95);
+                
+            } catch (canvasError) {
+                console.error('Canvas conversion failed:', canvasError);
+                // Fallback: open image in new tab
+                fallbackDownload();
+            }
+        };
         
-        // Trigger download
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        img.onerror = function() {
+            console.error('Image loading failed for download');
+            // Fallback: open image in new tab
+            fallbackDownload();
+        };
         
-        // Clean up
-        window.URL.revokeObjectURL(downloadUrl);
+        // Load the image
+        img.src = currentImageUrl;
         
-        console.log('Image downloaded:', filename);
     } catch (error) {
         console.error('Error downloading image:', error);
-        alert('Failed to download image. Please try again.');
+        // Fallback: open image in new tab
+        fallbackDownload();
+    }
+}
+
+// Fallback download method - opens image in new tab
+function fallbackDownload() {
+    if (currentImageUrl) {
+        // Extract filename for better UX
+        const urlParts = currentImageUrl.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        
+        // Open image in new tab where user can right-click and save
+        const newTab = window.open(currentImageUrl, '_blank');
+        
+        if (newTab) {
+            console.log('Image opened in new tab for download:', filename);
+            // Optional: Show user instruction
+            setTimeout(() => {
+                if (confirm('Image opened in new tab. Right-click and select "Save image as..." to download.')) {
+                    // User acknowledged
+                }
+            }, 1000);
+        } else {
+            alert('Pop-up blocked. Please allow pop-ups and try again, or right-click the image and select "Save image as..."');
+        }
     }
 }
 
