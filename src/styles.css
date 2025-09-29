@@ -21,7 +21,7 @@ body {
     background: var(--vanilla);
     min-height: 100vh;
     padding: 20px;
-    cursor: url('./paw_curser.svg') 16 16, auto;
+    cursor: auto; /* Default cursor, will be overridden by hover media query */
 }
 
 .container {
@@ -95,7 +95,7 @@ body {
     width: 100%;
     height: 250px;
     object-fit: cover;
-    cursor: url('./paw_curser.svg') 16 16, pointer;
+    cursor: pointer; /* Default pointer, will be overridden by hover media query */
 }
 
 .image-info {
@@ -128,7 +128,7 @@ body {
     border: 2px solid var(--harvest-gold);
     padding: 12px 30px;
     border-radius: 25px;
-    cursor: url('./paw_curser.svg') 16 16, pointer;
+    cursor: pointer; /* Default pointer, will be overridden by hover media query */
     font-size: 1rem;
     transition: all 0.3s ease;
     font-family: 'Comic Sans MS', sans-serif;
@@ -196,7 +196,7 @@ body {
     color: #f1f1f1;
     font-size: 40px;
     font-weight: bold;
-    cursor: url('./paw_curser.svg') 16 16, pointer;
+    cursor: pointer; /* Default pointer, will be overridden by hover media query */
 }
 
 .close:hover {
@@ -211,6 +211,40 @@ body {
     .gallery {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 15px;
+    }
+    
+    /* Mobile devices don't use cursors, so use default cursor behavior */
+    body, .image-card img, .refresh-btn, .close {
+        cursor: auto;
+    }
+    
+    /* Add touch-friendly hover states */
+    .image-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .image-card:active {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(221, 155, 26, 0.4);
+    }
+}
+
+/* Media query for devices that support hover (desktop/laptop with mouse) */
+@media (hover: hover) and (pointer: fine) {
+    body {
+        cursor: url('./paw_cursor_small.svg') 16 16, auto;
+    }
+    
+    .image-card img {
+        cursor: url('./paw_cursor_small.svg') 16 16, pointer;
+    }
+    
+    .refresh-btn {
+        cursor: url('./paw_cursor_small.svg') 16 16, pointer;
+    }
+    
+    .close {
+        cursor: url('./paw_cursor_small.svg') 16 16, pointer;
     }
 }
 
