@@ -256,6 +256,31 @@ body {
     border-left: 3px solid var(--mustard);
 }
 
+/* Custom icon styles with website color scheme */
+.icon-date {
+    color: var(--harvest-gold);
+    font-size: 1.1rem;
+    filter: none;
+}
+
+.icon-weather {
+    color: var(--xanthous);
+    font-size: 1.1rem;
+    filter: none;
+}
+
+.icon-location {
+    color: var(--mikado-yellow);
+    font-size: 1.1rem;
+    filter: none;
+}
+
+.icon-description {
+    color: var(--mustard);
+    font-size: 1.1rem;
+    filter: none;
+}
+
 .close {
     position: absolute;
     top: 15px;
