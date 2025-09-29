@@ -169,7 +169,7 @@ const imageMetadata = {
         date: 'October 26, 2022',
         weather: 'Cloudy, 16°C',
         location: 'Evan\'s Office',
-        description: 'Hehe'
+        description: 'Evan\'s evil hands are approaching... Caramel is not amused.'
     },
     'IMG_9981.jpg': {
         caption: 'I\'m handsome',
