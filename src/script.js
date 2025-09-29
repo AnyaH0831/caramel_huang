@@ -82,17 +82,17 @@ function displayImages(imageUrls) {
 const imageMetadata = {
     'IMG_0329.jpg': {
         caption: 'What you watchin\'?',
-        date: 'March 15, 2024',
+        date: 'January 16, 2023',
         weather: 'Partly Cloudy, 22°C',
-        location: 'Living Room',
-        description: 'Caramel caught in a curious moment, tilting her head with those adorable questioning eyes.'
+        location: 'Home',
+        description: 'Taking a million selfies here.'
     },
     'IMG_0396.jpg': {
         caption: 'Handshake',
-        date: 'March 20, 2024',
-        weather: 'Sunny, 25°C',
-        location: 'Backyard',
-        description: 'Teaching Caramel how to shake hands - she\'s such a quick learner!'
+        date: 'January 18, 2023',
+        weather: 'Cold, -10°C',
+        location: 'Home',
+        description: 'Anya\'s using Caramel to complete her science summative.'
     },
     'IMG_0538.jpg': {
         caption: 'Hehe I\'m pretty',
@@ -103,80 +103,80 @@ const imageMetadata = {
     },
     'IMG_2388.jpg': {
         caption: 'Happy Caramel at WOSS',
-        date: 'June 10, 2024',
-        weather: 'Overcast, 18°C',
-        location: 'WOSS Trail',
-        description: 'Adventure day at WOSS! Caramel loves exploring new trails and sniffing everything.'
+        date: 'June 13, 2025',
+        weather: 'Warm, 22°C',
+        location: 'WOSS North Campus',
+        description: 'Adventure day at WOSS! Caramel is excited to explore new areas.'
     },
     'IMG_2410.jpg': {
         caption: 'Watchin\' humans at WOSS',
-        date: 'June 10, 2024',
-        weather: 'Overcast, 18°C',
-        location: 'WOSS Trail',
-        description: 'Caramel being the best trail supervisor, keeping an eye on all the hikers.'
+        date: 'June 13, 2025',
+        weather: 'Warm, 22°C',
+        location: 'WOSS South Campus, Infront of library',
+        description: 'Caramel loves watching people and bark at them :D'
     },
     'IMG_2419.jpg': {
         caption: 'Haha I just barked at Mr.VR',
-        date: 'June 12, 2024',
-        weather: 'Light Rain, 16°C',
-        location: 'Home',
-        description: 'That mischievous look after successfully getting Mr.VR\'s attention!'
+        date: 'June 13, 2025',
+        weather: 'Warm, 22°C',
+        location: 'WOSS North Campus, Infront of Portable 1',
+        description: 'HAHA! Caramel hates Math!'
     },
     'IMG_2618.jpg': {
-        caption: 'I look so mature',
-        date: 'July 5, 2024',
-        weather: 'Warm, 28°C',
-        location: 'Front Porch',
-        description: 'Caramel in her distinguished pose, looking very grown-up and sophisticated.'
+        caption: 'I look so mature as an UOttawa alumini',
+        date: 'June 21, 2025',
+        weather: 'Hot, 25°C',
+        location: 'Home',
+        description: 'Caramel in her distinguished University of Ottawa alumini scarf.'
     },
     'IMG_2899.JPG': {
         caption: 'I\'m so mature',
-        date: 'July 18, 2024',
-        weather: 'Hot, 32°C',
-        location: 'Shaded Deck',
-        description: 'Another mature moment captured - Caramel definitely knows she\'s photogenic.'
+        date: 'April 30, 2022',
+        weather: 'Cool, 18°C',
+        location: 'Evan\'s Office',
+        description: 'The one time she\'s photogenic.'
     },
     'IMG_4208.jpg': {
         caption: 'I\'m a deer',
-        date: 'August 25, 2024',
-        weather: 'Cool, 15°C',
-        location: 'Forest Path',
-        description: 'Caramel\'s alert ears and stance make her look like a graceful forest deer.'
+        date: 'July 17, 2022',
+        weather: 'Warm, 25°C',
+        location: 'Backyard',
+        description: 'Caramel\'s ears are finally up like a deer.'
     },
     'IMG_5141.jpg': {
         caption: 'Skunk ToT',
-        date: 'September 8, 2024',
-        weather: 'Crisp, 12°C',
-        location: 'Backyard',
-        description: 'The day Caramel encountered a skunk... let\'s just say it didn\'t go as planned!'
+        date: 'September 21, 2025',
+        weather: 'Warm, 20°C',
+        location: 'Home',
+        description: 'The day Caramel encountered a skunk... that\'s why you shouldn\'t chase after a skunk!'
     },
     'IMG_7896.JPG': {
         caption: 'Hehe fwend',
-        date: 'September 20, 2024',
+        date: 'October 11, 2024',
         weather: 'Sunny, 19°C',
-        location: 'Dog Park',
-        description: 'Making new friends at the dog park - Caramel\'s social butterfly moment.'
+        location: 'Home',
+        description: 'Got forced to make a new friend.'
     },
     'IMG_7952.JPG': {
         caption: 'Chipmunks',
-        date: 'September 22, 2024',
+        date: 'October 19, 2022',
         weather: 'Clear, 17°C',
-        location: 'Park Trail',
-        description: 'Intensely focused on watching chipmunks - her hunting instincts on full display.'
+        location: 'Evan\'s Office',
+        description: 'Caramel is killing the chipmunk as usual.'
     },
     'IMG_8614.jpg': {
         caption: ':/',
-        date: 'September 25, 2024',
-        weather: 'Cloudy, 14°C',
-        location: 'Vet Clinic',
-        description: 'That "I really don\'t want to be here" expression at the vet\'s office.'
+        date: 'October 26, 2022',
+        weather: 'Cloudy, 16°C',
+        location: 'Evan\'s Office',
+        description: 'Hehe'
     },
     'IMG_9981.jpg': {
         caption: 'I\'m handsome',
-        date: 'September 28, 2024',
-        weather: 'Partly Sunny, 21°C',
-        location: 'Living Room',
-        description: 'Caramel strikes a pose, fully aware of how handsome he looks in this shot.'
+        date: 'April 6, 2025',
+        weather: 'Sunny, 15°C',
+        location: 'Home',
+        description: 'Caramel stole a bow tie from a cake.'
     }
 };
 
