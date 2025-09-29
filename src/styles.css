@@ -205,7 +205,7 @@ body {
     max-width: 70vw;
     max-height: 90vh;
     object-fit: contain;
-    border-radius: 10px;
+    border-radius: 10px 0 0 10px;
     display: block;
 }
 
@@ -324,6 +324,7 @@ body {
     .modal-content {
         max-width: 95vw;
         max-height: 60vh;
+        border-radius: 10px 10px 0 0;
     }
     
     .modal-info-panel {
