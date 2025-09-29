@@ -281,6 +281,44 @@ body {
     filter: none;
 }
 
+.icon-download {
+    color: var(--harvest-gold);
+    font-size: 1.1rem;
+    filter: none;
+}
+
+/* Download section styles */
+.download-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--flax);
+    text-align: center;
+}
+
+.download-btn {
+    background: var(--harvest-gold);
+    color: white;
+    border: 2px solid var(--harvest-gold);
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Comic Sans MS', sans-serif;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(221, 155, 26, 0.3);
+}
+
+.download-btn:hover {
+    background: var(--dark-goldenrod);
+    border-color: var(--dark-goldenrod);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(221, 155, 26, 0.4);
+}
+
 .close {
     position: absolute;
     top: 15px;
@@ -369,6 +407,19 @@ body {
         font-size: 30px;
         width: 40px;
         height: 40px;
+    }
+    
+    /* Mobile download button adjustments */
+    .download-section {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+    
+    .download-btn {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+        width: 100%;
+        justify-content: center;
     }
 }
 

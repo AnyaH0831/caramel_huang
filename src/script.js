@@ -19,6 +19,9 @@ const modal = document.getElementById('imageModal');
 const modalImg = document.getElementById('modalImage');
 const visitorCountEl = document.getElementById('visitorCount');
 
+// Current image URL for download
+let currentImageUrl = '';
+
 // Load images and update visitor count when page loads
 document.addEventListener('DOMContentLoaded', () => {
     loadImages();
@@ -208,6 +211,9 @@ function handleImageError(img) {
 }
 
 function openModal(imageUrl) {
+    // Store current image URL for download
+    currentImageUrl = imageUrl;
+    
     // Extract filename from URL
     const urlParts = imageUrl.split('/');
     const filename = urlParts[urlParts.length - 1];
@@ -238,6 +244,43 @@ function openModal(imageUrl) {
 
 function closeModal() {
     modal.style.display = 'none';
+}
+
+// Download current image
+async function downloadImage() {
+    if (!currentImageUrl) {
+        console.error('No image URL available for download');
+        return;
+    }
+    
+    try {
+        // Extract filename from URL
+        const urlParts = currentImageUrl.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        
+        // Fetch the image
+        const response = await fetch(currentImageUrl);
+        const blob = await response.blob();
+        
+        // Create download link
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up
+        window.URL.revokeObjectURL(downloadUrl);
+        
+        console.log('Image downloaded:', filename);
+    } catch (error) {
+        console.error('Error downloading image:', error);
+        alert('Failed to download image. Please try again.');
+    }
 }
 
 // Close modal when clicking outside the container
