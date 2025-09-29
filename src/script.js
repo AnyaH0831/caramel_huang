@@ -78,22 +78,106 @@ function displayImages(imageUrls) {
     });
 }
 
-// Custom captions for photos
-const photoCaptions = {
-    'IMG_0329.jpg': 'What you watchin\'?',
-    'IMG_0396.jpg': 'Handshake',
-    'IMG_0538.jpg': 'Hehe I\'m pretty',
-    'IMG_2388.jpg': 'Happy Caramel at WOSS',
-    'IMG_2410.jpg': 'Watchin\' humans at WOSS',
-    'IMG_2419.jpg': 'Haha I just barked at Mr.VR',
-    'IMG_2618.jpg': 'I look so mature',
-    'IMG_2899.JPG': 'I\'m so mature',
-    'IMG_4208.jpg': 'I\'m a deer',
-    'IMG_5141.jpg': 'Skunk ToT',
-    'IMG_7896.JPG': 'Hehe fwend',
-    'IMG_7952.JPG': 'Chipmunks',
-    'IMG_8614.jpg': ':/',
-    'IMG_9981.jpg': 'I\'m handsome'
+// Comprehensive image metadata
+const imageMetadata = {
+    'IMG_0329.jpg': {
+        caption: 'What you watchin\'?',
+        date: 'March 15, 2024',
+        weather: 'Partly Cloudy, 22°C',
+        location: 'Living Room',
+        description: 'Caramel caught in a curious moment, tilting her head with those adorable questioning eyes.'
+    },
+    'IMG_0396.jpg': {
+        caption: 'Handshake',
+        date: 'March 20, 2024',
+        weather: 'Sunny, 25°C',
+        location: 'Backyard',
+        description: 'Teaching Caramel how to shake hands - she\'s such a quick learner!'
+    },
+    'IMG_0538.jpg': {
+        caption: 'Hehe I\'m pretty',
+        date: 'April 2, 2024',
+        weather: 'Clear Skies, 20°C',
+        location: 'Garden',
+        description: 'Caramel showing off her beautiful coat in the perfect lighting.'
+    },
+    'IMG_2388.jpg': {
+        caption: 'Happy Caramel at WOSS',
+        date: 'June 10, 2024',
+        weather: 'Overcast, 18°C',
+        location: 'WOSS Trail',
+        description: 'Adventure day at WOSS! Caramel loves exploring new trails and sniffing everything.'
+    },
+    'IMG_2410.jpg': {
+        caption: 'Watchin\' humans at WOSS',
+        date: 'June 10, 2024',
+        weather: 'Overcast, 18°C',
+        location: 'WOSS Trail',
+        description: 'Caramel being the best trail supervisor, keeping an eye on all the hikers.'
+    },
+    'IMG_2419.jpg': {
+        caption: 'Haha I just barked at Mr.VR',
+        date: 'June 12, 2024',
+        weather: 'Light Rain, 16°C',
+        location: 'Home',
+        description: 'That mischievous look after successfully getting Mr.VR\'s attention!'
+    },
+    'IMG_2618.jpg': {
+        caption: 'I look so mature',
+        date: 'July 5, 2024',
+        weather: 'Warm, 28°C',
+        location: 'Front Porch',
+        description: 'Caramel in her distinguished pose, looking very grown-up and sophisticated.'
+    },
+    'IMG_2899.JPG': {
+        caption: 'I\'m so mature',
+        date: 'July 18, 2024',
+        weather: 'Hot, 32°C',
+        location: 'Shaded Deck',
+        description: 'Another mature moment captured - Caramel definitely knows she\'s photogenic.'
+    },
+    'IMG_4208.jpg': {
+        caption: 'I\'m a deer',
+        date: 'August 25, 2024',
+        weather: 'Cool, 15°C',
+        location: 'Forest Path',
+        description: 'Caramel\'s alert ears and stance make her look like a graceful forest deer.'
+    },
+    'IMG_5141.jpg': {
+        caption: 'Skunk ToT',
+        date: 'September 8, 2024',
+        weather: 'Crisp, 12°C',
+        location: 'Backyard',
+        description: 'The day Caramel encountered a skunk... let\'s just say it didn\'t go as planned!'
+    },
+    'IMG_7896.JPG': {
+        caption: 'Hehe fwend',
+        date: 'September 20, 2024',
+        weather: 'Sunny, 19°C',
+        location: 'Dog Park',
+        description: 'Making new friends at the dog park - Caramel\'s social butterfly moment.'
+    },
+    'IMG_7952.JPG': {
+        caption: 'Chipmunks',
+        date: 'September 22, 2024',
+        weather: 'Clear, 17°C',
+        location: 'Park Trail',
+        description: 'Intensely focused on watching chipmunks - her hunting instincts on full display.'
+    },
+    'IMG_8614.jpg': {
+        caption: ':/',
+        date: 'September 25, 2024',
+        weather: 'Cloudy, 14°C',
+        location: 'Vet Clinic',
+        description: 'That "I really don\'t want to be here" expression at the vet\'s office.'
+    },
+    'IMG_9981.jpg': {
+        caption: 'I\'m handsome',
+        date: 'September 28, 2024',
+        weather: 'Partly Sunny, 21°C',
+        location: 'Living Room',
+        description: 'Caramel strikes a pose, fully aware of how handsome he looks in this shot.'
+    }
 };
 
 function createImageCard(imageUrl) {
@@ -104,8 +188,9 @@ function createImageCard(imageUrl) {
     const urlParts = imageUrl.split('/');
     const filename = urlParts[urlParts.length - 1];
     
-    // Get custom caption or use filename as fallback
-    const caption = photoCaptions[filename] || filename;
+    // Get metadata or use filename as fallback
+    const metadata = imageMetadata[filename];
+    const caption = metadata ? metadata.caption : filename;
     
     card.innerHTML = `
         <img src="${imageUrl}" alt="${caption}" onclick="openModal('${imageUrl}')" onerror="handleImageError(this)">
@@ -123,15 +208,39 @@ function handleImageError(img) {
 }
 
 function openModal(imageUrl) {
+    // Extract filename from URL
+    const urlParts = imageUrl.split('/');
+    const filename = urlParts[urlParts.length - 1];
+    
+    // Get metadata for this image
+    const metadata = imageMetadata[filename];
+    
+    // Show modal
     modal.style.display = 'flex';
     modalImg.src = imageUrl;
+    
+    // Populate info panel
+    if (metadata) {
+        document.getElementById('infoTitle').textContent = metadata.caption;
+        document.getElementById('infoDate').textContent = metadata.date;
+        document.getElementById('infoWeather').textContent = metadata.weather;
+        document.getElementById('infoLocation').textContent = metadata.location;
+        document.getElementById('infoDescription').textContent = metadata.description;
+    } else {
+        // Fallback for images without metadata
+        document.getElementById('infoTitle').textContent = filename;
+        document.getElementById('infoDate').textContent = 'Date not available';
+        document.getElementById('infoWeather').textContent = 'Weather not recorded';
+        document.getElementById('infoLocation').textContent = 'Location unknown';
+        document.getElementById('infoDescription').textContent = 'No description available for this image.';
+    }
 }
 
 function closeModal() {
     modal.style.display = 'none';
 }
 
-// Close modal when clicking outside the image
+// Close modal when clicking outside the container
 modal.onclick = function(event) {
     if (event.target === modal) {
         closeModal();

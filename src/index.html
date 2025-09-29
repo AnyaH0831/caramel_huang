@@ -37,7 +37,30 @@
     <!-- Modal for full-size image viewing -->
     <div id="imageModal" class="modal">
         <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
+        <div class="modal-container">
+            <div class="modal-image-container">
+                <img class="modal-content" id="modalImage">
+            </div>
+            <div class="modal-info-panel" id="modalInfoPanel">
+                <h3 class="info-title" id="infoTitle">Image Details</h3>
+                <div class="info-section">
+                    <h4>📅 Date</h4>
+                    <p id="infoDate">-</p>
+                </div>
+                <div class="info-section">
+                    <h4>🌤️ Weather</h4>
+                    <p id="infoWeather">-</p>
+                </div>
+                <div class="info-section">
+                    <h4>📍 Location</h4>
+                    <p id="infoLocation">-</p>
+                </div>
+                <div class="info-section">
+                    <h4>📝 Description</h4>
+                    <p id="infoDescription">-</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
