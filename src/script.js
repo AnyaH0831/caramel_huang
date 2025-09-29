@@ -96,10 +96,10 @@ const imageMetadata = {
     },
     'IMG_0538.jpg': {
         caption: 'Hehe I\'m pretty',
-        date: 'April 2, 2024',
-        weather: 'Clear Skies, 20°C',
-        location: 'Garden',
-        description: 'Caramel showing off her beautiful coat in the perfect lighting.'
+        date: 'January 31, 2023',
+        weather: 'Cold, -15°C',
+        location: 'Home',
+        description: 'Caramel is pretty and she knows it.'
     },
     'IMG_2388.jpg': {
         caption: 'Happy Caramel at WOSS',
@@ -134,7 +134,7 @@ const imageMetadata = {
         date: 'April 30, 2022',
         weather: 'Cool, 18°C',
         location: 'Evan\'s Office',
-        description: 'The one time she\'s photogenic.'
+        description: 'The one time she\'s photogenic....Or the first time the photo was taken correctly.'
     },
     'IMG_4208.jpg': {
         caption: 'I\'m a deer',
