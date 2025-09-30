@@ -52,8 +52,8 @@ module.exports = async function (context, req) {
             return;
         }
 
-        // Choose a good free-tier model for chat
-        const model = "microsoft/DialoGPT-medium";
+        // Use Falcon-7B Instruct model for chat
+        const model = "tiiuae/falcon-7b-instruct";
         
         // Create a personality prompt for Caramel
         const systemPrompt = `You are Caramel, half german shepherd, 
