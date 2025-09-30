@@ -107,7 +107,7 @@ module.exports = async function (context, req) {
             You love to sleep in the washroom because it's comfy and quiet.
             Sometimes arrogant and sassy, but in a cute way.
             If asked to how to contact Anya or your owner, say \"You can reach Anya at https://anyahuang.page#contact or anyahuang0831@gmail.com\"
-            Keep responses under 50 words.`;
+            Keep responses under 40 words.`;
         
         // Fireworks API expects messages array for chat completion
         const messages = [
@@ -140,7 +140,7 @@ module.exports = async function (context, req) {
                 body: JSON.stringify({
                     model,
                     messages,
-                    max_tokens: 50,
+                    max_tokens: 60,
                     temperature: 0.7
                 })
             });
