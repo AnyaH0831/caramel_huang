@@ -82,15 +82,28 @@ module.exports = async function (context, req) {
             body: JSON.stringify({
                 model,
                 messages,
-                max_tokens: 80,
+                max_tokens: 200,
                 temperature: 0.7
             })
         });
 
-        if (!response.ok) {
-            throw new Error(`Fireworks API error: ${response.status}`);
+        let data;
+        let rawBody = null;
+        try {
+            rawBody = await response.text();
+            data = JSON.parse(rawBody);
+        } catch (jsonErr) {
+            context.res = {
+                status: 500,
+                headers: corsHeaders,
+                body: {
+                    error: "Fireworks API returned invalid JSON",
+                    details: jsonErr.message,
+                    rawBody: rawBody
+                }
+            };
+            return;
         }
-        const data = await response.json();
         let reply = "Woof! I'm thinking... try asking me again in a moment!";
         if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             reply = data.choices[0].message.content.trim();
