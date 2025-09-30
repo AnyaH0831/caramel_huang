@@ -72,10 +72,18 @@ module.exports = async function (context, req) {
         const fwToken = process.env.FIREWORKS_API_TOKEN;
         context.log("Fireworks token present:", !!fwToken);
         if (!fwToken) {
+            // API token missing -> Caramel is napping
+            const sleepyReplies = [
+                "Zzz... Caramel's taking a nap. Try again soon!",
+                "Shh — Caramel's in a deep snooze. Wake me up later!",
+                "Caramel is hibernating right now. Come back when she's had her treats!",
+                "She's napping on the couch. Try again after her nap!",
+                "Caramel's curled up and snoring. Ask me again in a bit!"
+            ];
             context.res = {
-                status: 500,
+                status: 200,
                 headers: corsHeaders,
-                body: { error: "Fireworks API token not configured" }
+                body: { reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)], error: true }
             };
             return;
         }
@@ -97,6 +105,7 @@ module.exports = async function (context, req) {
             Keep responses conversational and fun, like a dog with a great personality would chat. 
             Very lazy and loves naps, but get annoyed when woken up at night by Anya. 
             You love to sleep in the washroom because it's comfy and quiet.
+            Sometimes arrogant and sassy, but in a cute way.
             Keep responses under 50 words.`;
         
         // Fireworks API expects messages array for chat completion
@@ -106,10 +115,15 @@ module.exports = async function (context, req) {
         ];
         if (!fetchLib) {
             context.log.error("Fetch library is not available. Module load error:", fetchLoaderError);
+            const sleepyReplies = [
+                "Zzz... Caramel's mid-nap. The fetch is MIA. Try again later!",
+                "Caramel's snoring so loudly the network can't wake her. Try again soon!",
+                "She's dreaming of treats and didn't hear the question. Ask again later!"
+            ];
             context.res = {
-                status: 500,
+                status: 200,
                 headers: corsHeaders,
-                body: { error: "Server misconfiguration: fetch is not available" }
+                body: { reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)], error: true }
             };
             return;
         }
@@ -131,10 +145,15 @@ module.exports = async function (context, req) {
             });
         } catch (fetchErr) {
             context.log.error("Error while calling Fireworks API:", fetchErr && fetchErr.message);
+            const sleepyReplies = [
+                "Caramel's dozing and missed the call — try again after her nap!",
+                "She rolled over and snoozed through that one. Give it another try!",
+                "Caramel's in dreamland chasing squirrels. Ask later when she's awake!"
+            ];
             context.res = {
-                status: 502,
+                status: 200,
                 headers: corsHeaders,
-                body: { error: "Failed to reach Fireworks API", details: fetchErr && fetchErr.message }
+                body: { reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)], error: true }
             };
             return;
         }
@@ -145,25 +164,20 @@ module.exports = async function (context, req) {
             rawBody = await response.text();
             data = JSON.parse(rawBody);
         } catch (jsonErr) {
-            // Do not leak the token. Provide safe diagnostics instead.
-            const respDiagnostics = {
-                status: response.status,
-                headers: {
-                    'content-type': response.headers.get('content-type') || null,
-                    'content-length': response.headers.get('content-length') || null,
-                    'server': response.headers.get('server') || null,
-                    'date': response.headers.get('date') || null
-                }
-            };
+            // Do not leak the token. Use a sleepy reply rather than verbose diagnostics.
+            context.log.error("Invalid JSON from Fireworks API (masked):", jsonErr && jsonErr.message);
+            const sleepyReplies = [
+                "Zzz... Caramel's processing dreams. Try again soon!",
+                "She's snoozing and couldn't think of a reply — try again later!",
+                "Caramel's stuck in a nap loop. Ask later when she's awake!"
+            ];
 
             context.res = {
-                status: 500,
+                status: 200,
                 headers: corsHeaders,
                 body: {
-                    error: "Fireworks API returned invalid JSON",
-                    details: jsonErr.message,
-                    response: respDiagnostics,
-                    rawBody: rawBody
+                    reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)],
+                    error: true
                 }
             };
             return;
