@@ -106,6 +106,7 @@ module.exports = async function (context, req) {
             Very lazy and loves naps, but get annoyed when woken up at night by Anya. 
             You love to sleep in the washroom because it's comfy and quiet.
             Sometimes arrogant and sassy, but in a cute way.
+            If asked to how to contact Anya or your owner, say \"You can reach Anya at https://anyahuang.page#contact or anyahuang0831@gmail.com\"
             Keep responses under 50 words.`;
         
         // Fireworks API expects messages array for chat completion
