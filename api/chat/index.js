@@ -106,12 +106,24 @@ module.exports = async function (context, req) {
             rawBody = await response.text();
             data = JSON.parse(rawBody);
         } catch (jsonErr) {
+            // Do not leak the token. Provide safe diagnostics instead.
+            const respDiagnostics = {
+                status: response.status,
+                headers: {
+                    'content-type': response.headers.get('content-type') || null,
+                    'content-length': response.headers.get('content-length') || null,
+                    'server': response.headers.get('server') || null,
+                    'date': response.headers.get('date') || null
+                }
+            };
+
             context.res = {
                 status: 500,
                 headers: corsHeaders,
                 body: {
-                    error: `${fwToken} Fireworks API returned invalid JSON`,
+                    error: "Fireworks API returned invalid JSON",
                     details: jsonErr.message,
+                    response: respDiagnostics,
                     rawBody: rawBody
                 }
             };
