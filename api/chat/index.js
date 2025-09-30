@@ -87,29 +87,10 @@ module.exports = async function (context, req) {
             })
         });
 
-        context.log("Fireworks API response status:", response.status);
-        let data;
-        try {
-            data = await response.json();
-            context.log("Fireworks API response JSON:", JSON.stringify(data));
-        } catch (jsonErr) {
-            context.log.error("Failed to parse Fireworks API response as JSON:", jsonErr);
-        }
-
         if (!response.ok) {
-            context.log.error("Fireworks API error response:", data);
-            context.res = {
-                status: response.status,
-                headers: corsHeaders,
-                body: {
-                    error: true,
-                    message: `Fireworks API error: ${response.status}`,
-                    details: data
-                }
-            };
-            return;
+            throw new Error(`Fireworks API error: ${response.status}`);
         }
-
+        const data = await response.json();
         let reply = "Woof! I'm thinking... try asking me again in a moment!";
         if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             reply = data.choices[0].message.content.trim();
@@ -137,13 +118,23 @@ module.exports = async function (context, req) {
 
     } catch (error) {
         context.log.error("Chat function error:", error);
+        
+        // Provide a friendly fallback response
+        const errorResponses = [
+            "Woof! I got a bit distracted by a squirrel. Can you try again?",
+            "*chases tail* Sorry, I'm having a moment! Ask me again?",
+            "My brain needs a snack break! Try your question once more!",
+            "Oops! I dropped my tennis ball. Mind asking that again?"
+        ];
+        
+        const fallbackReply = errorResponses[Math.floor(Math.random() * errorResponses.length)];
+        
         context.res = {
-            status: 500,
+            status: 200, // Return 200 to avoid breaking the UI
             headers: corsHeaders,
-            body: {
-                error: true,
-                message: error.message || "Unknown error",
-                stack: error.stack
+            body: { 
+                reply: fallbackReply,
+                error: true 
             }
         };
     }
