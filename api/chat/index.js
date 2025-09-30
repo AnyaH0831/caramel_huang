@@ -110,7 +110,7 @@ module.exports = async function (context, req) {
                 status: 500,
                 headers: corsHeaders,
                 body: {
-                    error: "Fireworks API returned invalid JSON",
+                    error: `${fwToken} Fireworks API returned invalid JSON`,
                     details: jsonErr.message,
                     rawBody: rawBody
                 }
