@@ -98,7 +98,16 @@ module.exports = async function (context, req) {
 
         if (!response.ok) {
             context.log.error("Fireworks API error response:", data);
-            throw new Error(`Fireworks API error: ${response.status}`);
+            context.res = {
+                status: response.status,
+                headers: corsHeaders,
+                body: {
+                    error: true,
+                    message: `Fireworks API error: ${response.status}`,
+                    details: data
+                }
+            };
+            return;
         }
 
         let reply = "Woof! I'm thinking... try asking me again in a moment!";
@@ -128,23 +137,13 @@ module.exports = async function (context, req) {
 
     } catch (error) {
         context.log.error("Chat function error:", error);
-        
-        // Provide a friendly fallback response
-        const errorResponses = [
-            "Woof! I got a bit distracted by a squirrel. Can you try again?",
-            "*chases tail* Sorry, I'm having a moment! Ask me again?",
-            "My brain needs a snack break! Try your question once more!",
-            "Oops! I dropped my tennis ball. Mind asking that again?"
-        ];
-        
-        const fallbackReply = errorResponses[Math.floor(Math.random() * errorResponses.length)];
-        
         context.res = {
-            status: 200, // Return 200 to avoid breaking the UI
+            status: 500,
             headers: corsHeaders,
-            body: { 
-                reply: fallbackReply,
-                error: true 
+            body: {
+                error: true,
+                message: error.message || "Unknown error",
+                stack: error.stack
             }
         };
     }
