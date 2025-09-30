@@ -73,7 +73,7 @@ module.exports = async function (context, req) {
             { role: "system", content: systemPrompt },
             { role: "user", content: userMessage }
         ];
-        const response = await fetch("https://api.fireworks.ai/v1/chat/completions", {
+        const response = await fetch("https://api.fireworks.ai/inference/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${fwToken}`,
