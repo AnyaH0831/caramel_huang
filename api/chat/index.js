@@ -22,9 +22,22 @@ module.exports = async function (context, req) {
         "Content-Type": "application/json"
     };
 
+    // Quick debug GET endpoint to check env var presence (safe: does NOT return the token)
+    if (req.method === "GET") {
+        context.res = {
+            status: 200,
+            headers: corsHeaders,
+            body: {
+                ok: true,
+                FIREWORKS_API_TOKEN_present: !!process.env.FIREWORKS_API_TOKEN
+            }
+        };
+        return;
+    }
+
     // Debug logging
     context.log("Chat function started");
-    context.log("Environment HUGGINGFACE_API_TOKEN:", process.env.HUGGINGFACE_API_TOKEN ? "Exists" : "Missing");
+    context.log("Environment FIREWORKS_API_TOKEN:", process.env.FIREWORKS_API_TOKEN ? "Exists" : "Missing");
     context.log("Request body:", req.body);
 
     try {
