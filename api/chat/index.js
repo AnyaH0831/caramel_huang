@@ -1,4 +1,19 @@
-const fetch = require("node-fetch");
+// Resilient fetch loader: prefer global fetch (Node 18+), fall back to node-fetch if available.
+let fetchLib;
+let fetchLoaderError = null;
+try {
+    if (typeof globalThis.fetch === 'function') {
+        fetchLib = globalThis.fetch.bind(globalThis);
+    } else {
+        fetchLib = require("node-fetch");
+    }
+} catch (err) {
+    // Defer throwing until function invocation so Azure's language worker doesn't crash on module load.
+    fetchLib = null;
+    // We'll log this inside the function when context is available.
+    fetchLoaderError = err;
+}
+
 
 module.exports = async function (context, req) {
     // Handle CORS preflight requests
@@ -86,19 +101,40 @@ module.exports = async function (context, req) {
             { role: "system", content: systemPrompt },
             { role: "user", content: userMessage }
         ];
-        const response = await fetch("https://api.fireworks.ai/inference/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${fwToken}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                model,
-                messages,
-                max_tokens: 200,
-                temperature: 0.7
-            })
-        });
+        if (!fetchLib) {
+            context.log.error("Fetch library is not available. Module load error:", fetchLoaderError);
+            context.res = {
+                status: 500,
+                headers: corsHeaders,
+                body: { error: "Server misconfiguration: fetch is not available" }
+            };
+            return;
+        }
+
+        let response;
+        try {
+            response = await fetchLib("https://api.fireworks.ai/inference/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${fwToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    model,
+                    messages,
+                    max_tokens: 200,
+                    temperature: 0.7
+                })
+            });
+        } catch (fetchErr) {
+            context.log.error("Error while calling Fireworks API:", fetchErr && fetchErr.message);
+            context.res = {
+                status: 502,
+                headers: corsHeaders,
+                body: { error: "Failed to reach Fireworks API", details: fetchErr && fetchErr.message }
+            };
+            return;
+        }
 
         let data;
         let rawBody = null;
