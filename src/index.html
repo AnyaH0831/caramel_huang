@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caramel Huang</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Use Comic Neue as a web-safe comic-style font; falls back to system Comic Sans if unavailable -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -43,6 +44,8 @@
             </div>
             <div class="modal-info-panel" id="modalInfoPanel">
                 <h3 class="info-title" id="infoTitle">Image Details</h3>
+                <!-- Mobile-friendly close button inside info panel -->
+                <button class="mobile-close" onclick="closeModal()" aria-label="Close">Close</button>
                 <div class="info-section">
                     <h4>Date</h4>
                     <p id="infoDate">-</p>

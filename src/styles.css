@@ -69,15 +69,16 @@
     --dark-goldenrod: #bd7e01ff;
 }
 
+/* Prefer Comic Neue (web font), fall back to Comic Sans, then system sans */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
     background: var(--vanilla);
     min-height: 100vh;
     padding: 20px;
@@ -93,7 +94,7 @@ body {
     text-align: center;
     color: var(--dark-goldenrod);
     margin-bottom: 40px;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .header h1 {
@@ -101,14 +102,14 @@ body {
     text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
     margin-bottom: 10px;
     color: var(--harvest-gold);
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .header p {
     font-size: 1.2rem;
     opacity: 0.8;
     color: var(--dark-goldenrod);
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .loading {
@@ -116,7 +117,7 @@ body {
     color: var(--dark-goldenrod);
     font-size: 1.5rem;
     margin: 50px 0;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .error {
@@ -126,7 +127,7 @@ body {
     border-radius: 10px;
     text-align: center;
     margin: 20px 0;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .gallery {
@@ -167,14 +168,14 @@ body {
     color: #333;
     margin-bottom: 5px;
     word-break: break-all;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .image-url {
     font-size: 0.9rem;
     color: #666;
     word-break: break-all;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .controls {
@@ -191,7 +192,7 @@ body {
     cursor: pointer; /* Default pointer, will be overridden by hover media query */
     font-size: 1rem;
     transition: all 0.3s ease;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .refresh-btn:hover {
@@ -205,7 +206,7 @@ body {
     color: var(--dark-goldenrod);
     margin-bottom: 20px;
     font-size: 1.1rem;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
 }
 
 .visitor-counter {
@@ -213,7 +214,7 @@ body {
     color: var(--dark-goldenrod);
     margin-bottom: 20px;
     font-size: 1rem;
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
     background: rgba(255, 255, 255, 0.3);
     padding: 10px 20px;
     border-radius: 20px;
@@ -240,6 +241,26 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+}
+
+/* Ensure the modal close button is positioned and visible on all devices */
+.modal .close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1010; /* above modal content */
+    font-size: 26px;
+    width: 44px; /* minimum recommended touch target */
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    line-height: 1;
 }
 
 .modal-container {
@@ -280,9 +301,22 @@ body {
     flex-shrink: 0;
 }
 
+/* Mobile-close inside info panel (hidden by default) */
+.mobile-close {
+    display: none;
+    position: relative;
+    margin-bottom: 12px;
+    background: var(--harvest-gold);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+}
+
 .info-title {
     color: var(--dark-goldenrod);
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
     font-size: 1.5rem;
     margin-bottom: 25px;
     text-align: center;
@@ -296,7 +330,7 @@ body {
 
 .info-section h4 {
     color: var(--harvest-gold);
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
     font-size: 1rem;
     margin-bottom: 8px;
     display: flex;
@@ -466,6 +500,21 @@ body {
         font-size: 30px;
         width: 40px;
         height: 40px;
+    }
+
+    /* Make sure close sits above the modal content on small screens and is easy to tap */
+    .modal .close {
+        top: 10px;
+        right: 12px;
+        width: 48px;
+        height: 48px;
+        font-size: 28px;
+        background: rgba(0,0,0,0.65);
+    }
+
+    /* Show mobile-close button inside info panel on small screens */
+    .mobile-close {
+        display: inline-block;
     }
     
     /* Mobile download button adjustments */
