@@ -40,20 +40,18 @@ module.exports = async function (context, req) {
             return;
         }
 
-        const hfToken = process.env.HUGGINGFACE_API_TOKEN;
-        context.log("Hugging Face token present:", !!hfToken);
-        
-        if (!hfToken) {
+        // Use Fireworks API for chat completion
+        const fwToken = process.env.FIREWORKS_API_TOKEN;
+        context.log("Fireworks token present:", !!fwToken);
+        if (!fwToken) {
             context.res = {
                 status: 500,
                 headers: corsHeaders,
-                body: { error: "Hugging Face API token not configured" }
+                body: { error: "Fireworks API token not configured" }
             };
             return;
         }
-
-        // Use Falcon-7B Instruct model for chat
-        const model = "tiiuae/falcon-7b-instruct";
+        const model = "accounts/fireworks/models/llama-v3p1-8b-instruct";
         
         // Create a personality prompt for Caramel
         const systemPrompt = `You are Caramel, half german shepherd, 
@@ -70,43 +68,33 @@ module.exports = async function (context, req) {
             conversational and fun, like a dog with a great 
             personality would chat. Keep responses under 100 words.`;
         
-        const prompt = `${systemPrompt}\n\nHuman: ${userMessage}\nCaramel:`;
-
-        // Call Hugging Face Inference API
-        const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+        // Fireworks API expects messages array for chat completion
+        const messages = [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userMessage }
+        ];
+        const response = await fetch("https://api.fireworks.ai/v1/chat/completions", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${hfToken}`,
+                "Authorization": `Bearer ${fwToken}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ 
-                inputs: prompt,
-                parameters: {
-                    max_new_tokens: 80,
-                    temperature: 0.7,
-                    return_full_text: false
-                }
-            }),
+            body: JSON.stringify({
+                model,
+                messages,
+                max_tokens: 80,
+                temperature: 0.7
+            })
         });
 
         if (!response.ok) {
-            throw new Error(`Hugging Face API error: ${response.status}`);
+            throw new Error(`Fireworks API error: ${response.status}`);
         }
-
         const data = await response.json();
-        
-        // Handle different response formats
         let reply = "Woof! I'm thinking... try asking me again in a moment!";
-        
-        if (data && Array.isArray(data) && data[0]) {
-            reply = data[0].generated_text || reply;
-        } else if (data && data.generated_text) {
-            reply = data.generated_text;
+        if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+            reply = data.choices[0].message.content.trim();
         }
-
-        // Clean up the response (remove the prompt if it's included)
-        reply = reply.replace(systemPrompt, '').replace(`Human: ${userMessage}`, '').replace('Caramel:', '').trim();
-        
         // Fallback responses if empty or too short
         if (!reply || reply.length < 5) {
             const fallbackResponses = [
