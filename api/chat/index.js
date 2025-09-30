@@ -94,7 +94,7 @@ module.exports = async function (context, req) {
             and you love talking about adventures, treats, 
             belly rubs, and life in general. Keep responses 
             conversational and fun, like a dog with a great 
-            personality would chat. Keep responses under 100 words.`;
+            personality would chat. Keep responses under 50 words.`;
         
         // Fireworks API expects messages array for chat completion
         const messages = [
@@ -122,7 +122,7 @@ module.exports = async function (context, req) {
                 body: JSON.stringify({
                     model,
                     messages,
-                    max_tokens: 200,
+                    max_tokens: 50,
                     temperature: 0.7
                 })
             });
