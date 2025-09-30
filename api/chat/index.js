@@ -87,10 +87,20 @@ module.exports = async function (context, req) {
             })
         });
 
+        context.log("Fireworks API response status:", response.status);
+        let data;
+        try {
+            data = await response.json();
+            context.log("Fireworks API response JSON:", JSON.stringify(data));
+        } catch (jsonErr) {
+            context.log.error("Failed to parse Fireworks API response as JSON:", jsonErr);
+        }
+
         if (!response.ok) {
+            context.log.error("Fireworks API error response:", data);
             throw new Error(`Fireworks API error: ${response.status}`);
         }
-        const data = await response.json();
+
         let reply = "Woof! I'm thinking... try asking me again in a moment!";
         if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
             reply = data.choices[0].message.content.trim();
