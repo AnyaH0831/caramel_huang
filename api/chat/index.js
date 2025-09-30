@@ -22,8 +22,14 @@ module.exports = async function (context, req) {
         "Content-Type": "application/json"
     };
 
+    // Debug logging
+    context.log("Chat function started");
+    context.log("Environment HUGGINGFACE_API_TOKEN:", process.env.HUGGINGFACE_API_TOKEN ? "Exists" : "Missing");
+    context.log("Request body:", req.body);
+
     try {
         const userMessage = req.body?.message || "";
+        context.log("User message:", userMessage);
         
         if (!userMessage.trim()) {
             context.res = {
@@ -35,6 +41,7 @@ module.exports = async function (context, req) {
         }
 
         const hfToken = process.env.HUGGINGFACE_API_TOKEN;
+        context.log("Hugging Face token present:", !!hfToken);
         
         if (!hfToken) {
             context.res = {
