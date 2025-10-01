@@ -19,6 +19,17 @@ const modal = document.getElementById('imageModal');
 const modalImg = document.getElementById('modalImage');
 const visitorCountEl = document.getElementById('visitorCount');
 
+// Session ID for chat persistence (in-memory + sessionStorage)
+let chatSessionId = null;
+
+// Initialize sessionId from sessionStorage if available
+try {
+    const savedSession = sessionStorage.getItem('caramelChatSessionId');
+    if (savedSession) chatSessionId = savedSession;
+} catch (e) {
+    console.warn('Could not access sessionStorage for chatSessionId:', e);
+}
+
 // Current image URL for download
 let currentImageUrl = '';
 
@@ -505,15 +516,29 @@ async function sendChatMessage() {
             ? 'http://localhost:7071' 
             : `https://${environment}`;
         
+        // Include sessionId when available so server can load/save memory for this session
+        const payload = { message: message };
+        if (chatSessionId) payload.sessionId = chatSessionId;
+
         const response = await fetch(`${apiBaseUrl}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify(payload)
         });
         
         const data = await response.json();
+
+        // Persist sessionId returned from server for future requests
+        if (data && data.sessionId) {
+            chatSessionId = data.sessionId;
+            try {
+                sessionStorage.setItem('caramelChatSessionId', chatSessionId);
+            } catch (e) {
+                console.warn('Could not save chatSessionId to sessionStorage:', e);
+            }
+        }
         
         // Remove typing indicator
         removeTypingIndicator();

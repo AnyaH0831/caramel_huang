@@ -14,6 +14,16 @@ try {
     fetchLoaderError = err;
 }
 
+// Blob storage loader for local memory (defer errors until runtime)
+let BlobServiceClient = null;
+let blobLoaderError = null;
+try {
+    BlobServiceClient = require('@azure/storage-blob').BlobServiceClient;
+} catch (e) {
+    BlobServiceClient = null;
+    blobLoaderError = e;
+}
+
 
 module.exports = async function (context, req) {
     // Handle CORS preflight requests
@@ -55,8 +65,67 @@ module.exports = async function (context, req) {
     context.log("Environment FIREWORKS_API_TOKEN:", process.env.FIREWORKS_API_TOKEN ? "Exists" : "Missing");
     context.log("Request body:", req.body);
 
+    // Storage connection string (supports AZURE_STORAGE_CONNECTION_STRING or AzureWebJobsStorage)
+    const storageConn = process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AzureWebJobsStorage || null;
+    const memoryContainer = 'chat-memory';
+
+    // helper: convert readable stream to string
+    async function streamToString(readable) {
+        if (!readable) return '';
+        return await new Promise((resolve, reject) => {
+            const chunks = [];
+            readable.on('data', (data) => chunks.push(data.toString()));
+            readable.on('end', () => resolve(chunks.join('')));
+            readable.on('error', reject);
+        });
+    }
+
+    // helper: load session memory from blob storage
+    async function loadSessionMemory(sessionId) {
+        if (!BlobServiceClient || !storageConn) return [];
+        try {
+            const blobServiceClient = BlobServiceClient.fromConnectionString(storageConn);
+            const containerClient = blobServiceClient.getContainerClient(memoryContainer);
+            await containerClient.createIfNotExists();
+            const blobClient = containerClient.getBlobClient(`session-${sessionId}.json`);
+            const exists = await blobClient.exists();
+            if (!exists) return [];
+            const download = await blobClient.download();
+            const txt = await streamToString(download.readableStreamBody);
+            return JSON.parse(txt || '[]');
+        } catch (err) {
+            context.log.error('Failed loading session memory:', err && err.message);
+            return [];
+        }
+    }
+
+    // helper: save session memory
+    async function saveSessionMemory(sessionId, memoryArray) {
+        if (!BlobServiceClient || !storageConn) return;
+        try {
+            const blobServiceClient = BlobServiceClient.fromConnectionString(storageConn);
+            const containerClient = blobServiceClient.getContainerClient(memoryContainer);
+            await containerClient.createIfNotExists();
+            const blobClient = containerClient.getBlockBlobClient(`session-${sessionId}.json`);
+            const data = JSON.stringify(memoryArray || []);
+            await blobClient.uploadData(Buffer.from(data), { overwrite: true });
+        } catch (err) {
+            context.log.error('Failed saving session memory:', err && err.message);
+        }
+    }
+
     try {
         const userMessage = req.body?.message || "";
+        // sessionId may be provided by client; if not, generate one
+        let sessionId = req.body?.sessionId || null;
+        if (!sessionId) {
+            try {
+                const crypto = require('crypto');
+                sessionId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : `s-${Date.now()}-${Math.floor(Math.random()*1000000)}`;
+            } catch (e) {
+                sessionId = `s-${Date.now()}-${Math.floor(Math.random()*1000000)}`;
+            }
+        }
         context.log("User message:", userMessage);
         
         if (!userMessage.trim()) {
@@ -105,15 +174,29 @@ module.exports = async function (context, req) {
             Keep responses conversational and fun, like a dog with a great personality would chat. 
             Very lazy and loves naps, but get annoyed when woken up at night by Anya. 
             You love to sleep in the washroom because it's comfy and quiet.
-            Sometimes arrogant and sassy, but in a cute way.
+            Sometimes arrogant, but in a cute way.
             If asked to how to contact Anya or your owner, say \"You can reach Anya at https://anyahuang.page#contact or anyahuang0831@gmail.com\"
             Keep responses under 40 words.`;
         
-        // Fireworks API expects messages array for chat completion
-        const messages = [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userMessage }
-        ];
+        // Fireworks API expects messages array for chat completion.
+        // Load session memory (if available) and prepend it to the messages so the model has context.
+        let messages = [ { role: "system", content: systemPrompt } ];
+        let sessionMemory = [];
+        try {
+            sessionMemory = await loadSessionMemory(sessionId);
+        } catch (e) {
+            context.log.error('Session memory load error (ignored):', e && e.message);
+            sessionMemory = [];
+        }
+
+        // sessionMemory should be an array of {role, content}
+        if (Array.isArray(sessionMemory) && sessionMemory.length > 0) {
+            // include last N memory messages (already stored as role/content pairs)
+            messages = messages.concat(sessionMemory);
+        }
+
+        // finally add current user message
+        messages.push({ role: "user", content: userMessage });
         if (!fetchLib) {
             context.log.error("Fetch library is not available. Module load error:", fetchLoaderError);
             const sleepyReplies = [
@@ -199,12 +282,29 @@ module.exports = async function (context, req) {
             reply = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
         }
 
+        // Save user + assistant turn to session memory (limit to last 10 entries)
+        try {
+            const newMemory = sessionMemory || [];
+            // push user then assistant
+            newMemory.push({ role: 'user', content: userMessage });
+            newMemory.push({ role: 'assistant', content: reply });
+            // keep only last 10 messages (or last 20 role entries)
+            const maxEntries = 20;
+            if (newMemory.length > maxEntries) {
+                newMemory.splice(0, newMemory.length - maxEntries);
+            }
+            await saveSessionMemory(sessionId, newMemory);
+        } catch (saveErr) {
+            context.log.error('Error saving session memory (ignored):', saveErr && saveErr.message);
+        }
+
         context.res = {
             status: 200,
             headers: corsHeaders,
             body: { 
                 reply: reply,
-                cached: false 
+                cached: false,
+                sessionId: sessionId
             }
         };
 
