@@ -58,7 +58,9 @@
     word-break: break-word;
 }
 :root {
-    --vanilla: #fff0b5ff;
+    /* Site color tokens */
+    --vanilla: #ffe8a8; /* main page background (user requested color) */
+    --game-bg: #fff3c6; /* slightly lighter variant for game canvas background */
     --flax: #ffee93ff;
     --maize: #ffec71ff;
     --maize-2: #ffe94eff;
@@ -124,7 +126,7 @@ body {
     background: rgba(231, 76, 60, 0.9);
     color: white;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 25px; /* match .refresh-btn */
     text-align: center;
     margin: 20px 0;
     font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
@@ -309,7 +311,7 @@ body {
     background: var(--harvest-gold);
     color: white;
     padding: 10px 14px;
-    border-radius: 10px;
+    border-radius: 25px;
     border: none;
     font-weight: bold;
 }
@@ -348,6 +350,71 @@ body {
     padding: 10px 15px;
     border-radius: 10px;
     border-left: 3px solid var(--mustard);
+}
+
+/* Game end overlay (matches site modal / card styles) */
+.game-end-overlay {
+    position: fixed;
+    inset: 12px; /* shorthand for top/right/bottom/left */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    pointer-events: auto;
+}
+.game-end-card {
+    background: var(--vanilla);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+    border: 2px solid rgba(0,0,0,0.08);
+    padding: 22px 26px;
+    max-width: 520px;
+    width: min(92%, 520px);
+    text-align: center;
+    color: var(--dark-goldenrod);
+}
+.game-end-title {
+    margin: 0 0 8px 0;
+    color: var(--harvest-gold);
+    font-size: 1.6rem;
+}
+.game-end-body {
+    margin: 6px 0 12px 0;
+    color: var(--dark-goldenrod);
+    font-size: 1rem;
+}
+.game-end-score {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+}
+
+/* Game HUD: Score and High background styling */
+.game-ui {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.game-ui .score, .game-ui .highscore {
+    background: var(--game-bg);
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--dark-goldenrod);
+    font-weight: 700;
+}
+.game-ui .score span, .game-ui .highscore span {
+    color: #222;
+    margin-left: 6px;
+}
+/* Ensure the Play again button visually matches other site buttons */
+.game-end-card .refresh-btn {
+    margin-top: 8px;
+    padding: 10px 20px;
+    border-radius: 25px;
 }
 
 /* Custom icon styles with website color scheme */
@@ -892,3 +959,87 @@ body {
         font-size: 1.5rem;
     }
 }
+
+/* Top navigation bar */
+.top-nav {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 16px;
+    /* make the navbar shorter horizontally: centered at 50% width on larger screens */
+    width: 50%;
+    max-width: 900px; /* keeps it reasonable on very wide screens */
+    margin: 0 auto 16px; /* center horizontally and keep bottom spacing */
+    background: rgba(221,155,26,0.55); /* ~55% opacity of harvest-gold */
+    border-radius: 25px !important;
+    box-shadow: 0 6px 18px rgba(221,155,26,0.06);
+    /* static flow: navbar should not follow on scroll */
+    position: static;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+.top-nav .nav-link {
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 18px;
+    color: var(--dark-goldenrod); /* dark brown for Home/Game links */
+    font-weight: 700;
+    border: 2px solid transparent;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.top-nav .nav-link:hover {
+    background: rgba(255,255,255,0.22); /* subtle light overlay */
+    color: var(--dark-goldenrod);
+}
+.top-nav .nav-link.active {
+    background: rgba(255,255,255,0.30); /* slightly stronger for active */
+    color: var(--dark-goldenrod);
+    border-color: rgba(255,255,255,0.22);
+}
+
+/* Responsive: on small viewports let the nav expand and use edge-safe padding */
+@media (max-width: 700px) {
+    .top-nav {
+        width: calc(100% - 40px);
+        margin: 0 auto 12px;
+        padding: 8px 16px;
+    }
+    .top-nav .nav-link {
+        padding: 6px 10px;
+    }
+}
+
+/* Dropdown menu inside top-nav */
+.top-nav .nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.top-nav .nav-dropdown .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.top-nav .nav-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.98);
+    color: var(--dark-goldenrod);
+    min-width: 160px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    border-radius: 10px;
+    padding: 8px 6px;
+    z-index: 40;
+}
+.top-nav .nav-dropdown-content a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--dark-goldenrod);
+    text-decoration: none;
+    border-radius: 8px;
+}
+.top-nav .nav-dropdown-content a:hover { background: rgba(221,155,26,0.08); }
+.top-nav .nav-dropdown:hover .nav-dropdown-content { display: block; }

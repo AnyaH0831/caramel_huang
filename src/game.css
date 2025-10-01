@@ -1,0 +1,44 @@
+/* Basic styling for Treat Catcher game */
+:root {
+    --bg: var(--vanilla);
+    --panel: var(--game-bg);
+    --accent: #bd7e01;
+    --text: #4a2900;
+}
+
+body { background: var(--bg); }
+
+.game-ui {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.game-ui .score, .game-ui .highscore {
+    background: var(--panel); /* use the site's light game background */
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--text);
+    font-weight: 700;
+}
+
+#gameCanvas {
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(189,126,1,0.12);
+    background: var(--panel);
+}
+
+.game-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    #gameCanvas { height: 360px; }
+}
