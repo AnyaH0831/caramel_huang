@@ -407,8 +407,9 @@ body {
     font-weight: 700;
 }
 .game-ui .score span, .game-ui .highscore span {
-    color: #222;
+    color: var(--dark-goldenrod);
     margin-left: 6px;
+    font-weight: 800;
 }
 /* Ensure the Play again button visually matches other site buttons */
 .game-end-card .refresh-btn {

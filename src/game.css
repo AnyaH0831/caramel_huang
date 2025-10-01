@@ -20,8 +20,8 @@ body { background: var(--bg); }
     background: var(--panel); /* use the site's light game background */
     padding: 8px 12px;
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.06);
-    color: var(--text);
+    border: 1px solid rgba(221,155,26,0.08);
+    color: var(--dark-goldenrod);
     font-weight: 700;
 }
 
