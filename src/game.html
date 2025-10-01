@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game - Caramel Huang</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="top-nav" role="navigation" aria-label="Main navigation">
+        <a href="index.html" class="nav-link" data-page="home">Home</a>
+        <div class="nav-dropdown">
+            <a href="#" class="nav-link" aria-haspopup="true" aria-expanded="false">Game ▾</a>
+            <div class="nav-dropdown-content" role="menu" aria-label="Games">
+                <a href="game.html" role="menuitem">TreatCatcher</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>TreatCatcher</h1>
+            <p>Use your bowl to catch as many treats as you can — but watch out for chocolate!</p>
+        </div>
+
+        <div id="game-root" style="text-align:center; margin-top:20px;">
+            <div id="game-ui" class="game-ui">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="highscore">High: <span id="highscore">0</span></div>
+            </div>
+
+            <canvas id="gameCanvas" width="800" height="520" style="max-width:100%; border-radius:12px;"></canvas>
+
+            <div class="game-controls" style="margin-top:14px;">
+                <button id="startBtn" class="refresh-btn">Start Game</button>
+                <button id="restartBtn" class="refresh-btn" style="display:none;">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="game.css">
+    <script src="game.js"></script>
+</body>
+</html>

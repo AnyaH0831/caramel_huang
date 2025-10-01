@@ -674,3 +674,56 @@ document.addEventListener('DOMContentLoaded', function() {
     chatCache['treats'] = "Did someone say TREATS?! *perks up ears* I LOVE treats! Got any? 🦴";
     chatCache['walk'] = "WALK?! Did you say WALK?! *spins in circles* When are we going?! 🚶‍♂️";
 });
+
+// Navigation: highlight the active link based on current filename
+function highlightActiveNav() {
+    try {
+        const links = document.querySelectorAll('.top-nav .nav-link');
+        if (!links || links.length === 0) return;
+        const path = window.location.pathname.split('/').pop() || 'index.html';
+        links.forEach(link => {
+            const href = link.getAttribute('href') || '';
+            const file = href.split('/').pop();
+            if ((file === path) || (file === 'index.html' && (path === '' || path === 'index.html'))) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    } catch (e) {
+        console.warn('Could not highlight nav links:', e);
+    }
+}
+
+// Run on load and when history changes (in case SPA behavior added later)
+document.addEventListener('DOMContentLoaded', highlightActiveNav);
+window.addEventListener('popstate', highlightActiveNav);
+
+// Dropdown click behavior: if a nav item is a dropdown, clicking the top label toggles the submenu
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const dropdownToggles = document.querySelectorAll('.top-nav .nav-dropdown > .nav-link');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(ev) {
+                // prevent navigation and toggle dropdown visibility
+                ev.preventDefault();
+                const dropdown = toggle.parentElement;
+                const menu = dropdown.querySelector('.nav-dropdown-content');
+                if (!menu) return;
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!expanded));
+                // simple show/hide via inline style in addition to CSS hover rule
+                if (expanded) menu.style.display = 'none'; else menu.style.display = 'block';
+            });
+        });
+        // Close dropdowns when clicking elsewhere
+        document.addEventListener('click', function(ev) {
+            const open = document.querySelectorAll('.top-nav .nav-dropdown .nav-dropdown-content');
+            open.forEach(menu => {
+                const parent = menu.parentElement;
+                if (!parent) return;
+                if (!parent.contains(ev.target)) menu.style.display = 'none';
+            });
+        });
+    } catch (e) { console.warn('Dropdown toggle init failed', e); }
+});
