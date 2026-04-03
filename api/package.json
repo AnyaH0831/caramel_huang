@@ -1,1 +1,13 @@
-{}
+{
+  "name": "caramel-api",
+  "version": "1.0.0",
+  "description": "Azure Functions for Caramel website",
+  "private": true,
+  "dependencies": {
+    "@azure/storage-blob": "^12.28.0",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
