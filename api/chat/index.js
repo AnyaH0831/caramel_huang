@@ -274,7 +274,7 @@ module.exports = async function (context, req) {
                         body: JSON.stringify({
                             model,
                             messages,
-                            max_tokens: 60,
+                            max_tokens: 180,
                             temperature: 0.7
                         })
                     });
