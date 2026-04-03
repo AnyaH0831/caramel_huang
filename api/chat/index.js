@@ -24,6 +24,40 @@ try {
     blobLoaderError = e;
 }
 
+function extractReplyFromFireworksResponse(data) {
+    if (!data || typeof data !== 'object') return '';
+
+    if (data.choices && Array.isArray(data.choices) && data.choices[0]) {
+        const choice = data.choices[0];
+        if (choice.message && typeof choice.message.content === 'string') {
+            return choice.message.content.trim();
+        }
+        if (typeof choice.text === 'string') {
+            return choice.text.trim();
+        }
+    }
+
+    if (data.output && Array.isArray(data.output) && data.output[0]) {
+        const first = data.output[0];
+        if (typeof first.content === 'string') {
+            return first.content.trim();
+        }
+        if (Array.isArray(first.content)) {
+            const joined = first.content
+                .map((part) => (typeof part === 'string' ? part : part && part.text ? part.text : ''))
+                .join(' ')
+                .trim();
+            if (joined) return joined;
+        }
+    }
+
+    if (data.message && typeof data.message.content === 'string') {
+        return data.message.content.trim();
+    }
+
+    return '';
+}
+
 
 module.exports = async function (context, req) {
     // Handle CORS preflight requests
@@ -156,7 +190,16 @@ module.exports = async function (context, req) {
             };
             return;
         }
-        const model = "accounts/fireworks/models/llama-v3p1-8b-instruct";
+        const modelCandidates = [
+            process.env.FIREWORKS_MODEL,
+            "accounts/fireworks/models/llama-v3p1-8b-instruct",
+            "accounts/fireworks/models/llama-v3p3-70b-instruct"
+        ].filter(Boolean);
+        const endpointCandidates = [
+            process.env.FIREWORKS_API_URL,
+            "https://api.fireworks.ai/inference/v1/chat/completions",
+            "https://api.fireworks.ai/v1/chat/completions"
+        ].filter(Boolean);
         
         // Create a personality prompt for Caramel
         const systemPrompt = 
@@ -212,48 +255,69 @@ module.exports = async function (context, req) {
             return;
         }
 
-        let response;
-        try {
-            response = await fetchLib("https://api.fireworks.ai/inference/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${fwToken}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    model,
-                    messages,
-                    max_tokens: 60,
-                    temperature: 0.7
-                })
-            });
-        } catch (fetchErr) {
-            context.log.error("Error while calling Fireworks API:", fetchErr && fetchErr.message);
+        let reply = "";
+        let lastApiError = "";
+
+        for (const endpoint of endpointCandidates) {
+            for (const model of modelCandidates) {
+                let response;
+                let rawBody = "";
+                let parsed = null;
+
+                try {
+                    response = await fetchLib(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${fwToken}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            model,
+                            messages,
+                            max_tokens: 60,
+                            temperature: 0.7
+                        })
+                    });
+                } catch (fetchErr) {
+                    lastApiError = `Network error calling Fireworks (${endpoint}): ${fetchErr && fetchErr.message}`;
+                    context.log.error(lastApiError);
+                    continue;
+                }
+
+                try {
+                    rawBody = await response.text();
+                    parsed = rawBody ? JSON.parse(rawBody) : null;
+                } catch (jsonErr) {
+                    lastApiError = `Invalid JSON from Fireworks (${endpoint}): ${jsonErr && jsonErr.message}`;
+                    context.log.error(lastApiError);
+                    continue;
+                }
+
+                if (!response.ok) {
+                    const errMsg = parsed && parsed.error && parsed.error.message ? parsed.error.message : rawBody;
+                    lastApiError = `Fireworks non-OK response (${response.status}) endpoint=${endpoint} model=${model} msg=${(errMsg || '').slice(0, 300)}`;
+                    context.log.error(lastApiError);
+                    continue;
+                }
+
+                reply = extractReplyFromFireworksResponse(parsed);
+                if (reply) {
+                    context.log(`Fireworks chat success via endpoint=${endpoint}, model=${model}`);
+                    break;
+                }
+
+                lastApiError = `No assistant reply in successful Fireworks response endpoint=${endpoint} model=${model}`;
+                context.log.error(lastApiError);
+            }
+
+            if (reply) break;
+        }
+
+        if (!reply) {
             const sleepyReplies = [
                 "Caramel's dozing and missed the call — try again after her nap!",
                 "She rolled over and snoozed through that one. Give it another try!",
                 "Caramel's in dreamland chasing squirrels. Ask later when she's awake!"
-            ];
-            context.res = {
-                status: 200,
-                headers: corsHeaders,
-                body: { reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)], error: true }
-            };
-            return;
-        }
-
-        let data;
-        let rawBody = null;
-        try {
-            rawBody = await response.text();
-            data = JSON.parse(rawBody);
-        } catch (jsonErr) {
-            // Do not leak the token. Use a sleepy reply rather than verbose diagnostics.
-            context.log.error("Invalid JSON from Fireworks API (masked):", jsonErr && jsonErr.message);
-            const sleepyReplies = [
-                "Zzz... Caramel's processing dreams. Try again soon!",
-                "She's snoozing and couldn't think of a reply — try again later!",
-                "Caramel's stuck in a nap loop. Ask later when she's awake!"
             ];
 
             context.res = {
@@ -261,15 +325,13 @@ module.exports = async function (context, req) {
                 headers: corsHeaders,
                 body: {
                     reply: sleepyReplies[Math.floor(Math.random() * sleepyReplies.length)],
-                    error: true
+                    error: true,
+                    details: "Fireworks API call failed. Check Function logs for endpoint/model errors."
                 }
             };
             return;
         }
-        let reply = "Woof! I'm thinking... try asking me again in a moment!";
-        if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
-            reply = data.choices[0].message.content.trim();
-        }
+
         // Fallback responses if empty or too short
         if (!reply || reply.length < 5) {
             const fallbackResponses = [
