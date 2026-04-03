@@ -1,20 +1,49 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
-    const containerName = "dog-photos"; // your container
-    const blobServiceClient = BlobServiceClient.fromConnectionString(
-        process.env.AZURE_STORAGE_CONNECTION_STRING
-    );
-    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const containerName = "dog-photos";
 
-    const images = [];
-    for await (const blob of containerClient.listBlobsFlat()) {
-        images.push(`https://${process.env.STORAGE_ACCOUNT_NAME}.blob.core.windows.net/${containerName}/${blob.name}`);
+    try {
+        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AzureWebJobsStorage;
+        if (!connectionString) {
+            context.log.warn("Storage connection string missing. Returning empty image list.");
+            context.res = {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: []
+            };
+            return;
+        }
+
+        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        const containerClient = blobServiceClient.getContainerClient(containerName);
+
+        const images = [];
+        for await (const blob of containerClient.listBlobsFlat()) {
+            const blobClient = containerClient.getBlobClient(blob.name);
+            images.push(blobClient.url);
+        }
+
+        context.res = {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: images
+        };
+    } catch (error) {
+        context.log.error("Error loading images:", error && error.message);
+        context.res = {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: []
+        };
     }
-
-    context.res = {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-        body: images
-    };
 };

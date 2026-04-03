@@ -3,9 +3,21 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 module.exports = async function (context, req) {
     try {
         // Check if connection string exists
-        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AzureWebJobsStorage;
         if (!connectionString) {
-            throw new Error("AZURE_STORAGE_CONNECTION_STRING environment variable is not set");
+            context.log.warn("Storage connection string missing. Returning fallback visitor count.");
+            context.res = {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: {
+                    count: 0,
+                    message: "Visitor count unavailable (storage not configured)"
+                }
+            };
+            return;
         }
         
         console.log("Connection string exists, creating blob service client...");
@@ -65,7 +77,7 @@ module.exports = async function (context, req) {
         console.error('Error details:', {
             message: error.message,
             stack: error.stack,
-            connectionStringExists: !!process.env.AZURE_STORAGE_CONNECTION_STRING,
+            connectionStringExists: !!(process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AzureWebJobsStorage),
             storageAccountName: process.env.STORAGE_ACCOUNT_NAME
         });
         
